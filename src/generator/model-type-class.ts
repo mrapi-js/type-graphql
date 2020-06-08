@@ -63,6 +63,7 @@ export default async function generateObjectTypeClassFromModel(
           `{
             isAbstract: true,
             description: ${modelDocs ? `"${modelDocs}"` : "undefined"},
+            simpleResolvers: true,
           }`,
         ],
       },

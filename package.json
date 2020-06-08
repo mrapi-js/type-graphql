@@ -1,5 +1,5 @@
 {
-  "name": "typegraphql-prisma",
+  "name": "@mrapi/typegraphql-prisma",
   "version": "0.2.3",
   "scripts": {
     "build": "tsc",
@@ -13,22 +13,22 @@
     "basic-example:docker": "docker-compose up -d --force-recreate basic-example && docker-compose logs -f basic-example"
   },
   "peerDependencies": {
-    "@prisma/cli": "2.0.0-alpha.1236",
-    "@prisma/client": "2.0.0-alpha.1236",
+    "@prisma/cli": "2.0.0-beta.6",
+    "@prisma/client": "2.0.0-beta.6",
     "@types/node": "*",
     "graphql-type-json": "^0.3.1",
     "type-graphql": "1.0.0-rc.2"
   },
   "dependencies": {
-    "@prisma/generator-helper": "2.0.0-alpha.1236",
-    "@prisma/sdk": "2.0.0-alpha.1236",
+    "@prisma/generator-helper": "2.0.0-beta.6",
+    "@prisma/sdk": "2.0.0-beta.6",
     "pluralize": "^8.0.0",
-    "ts-morph": "^7.1.0",
+    "ts-morph": "^7.1.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
-    "@prisma/cli": "2.0.0-alpha.1236",
-    "@prisma/client": "2.0.0-alpha.1236",
+    "@prisma/cli": "2.0.0-beta.6",
+    "@prisma/client": "2.0.0-beta.6",
     "@types/graphql-type-json": "^0.3.2",
     "@types/jest": "^25.2.3",
     "@types/node": "^14.0.5",
@@ -58,10 +58,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MichalLytek/type-graphql.git"
+    "url": "https://github.com/mrapi-js/type-graphql.git"
   },
   "bugs": {
-    "url": "https://github.com/MichalLytek/type-graphql/issues"
+    "url": "https://github.com/mrapi-js/type-graphql/issues"
   },
   "keywords": [
     "type-graphql",
