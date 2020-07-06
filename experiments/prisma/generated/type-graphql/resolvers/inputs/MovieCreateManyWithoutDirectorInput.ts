@@ -1,5 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import GraphQLJSON from "graphql-type-json";
+import { JsonValue, InputJsonValue } from "../../../client";
 import { MovieCreateWithoutDirectorInput } from "../inputs/MovieCreateWithoutDirectorInput";
 import { MovieWhereUniqueInput } from "../inputs/MovieWhereUniqueInput";
 
@@ -12,11 +13,11 @@ export class MovieCreateManyWithoutDirectorInput {
     nullable: true,
     description: undefined
   })
-  create?: MovieCreateWithoutDirectorInput[] | null | undefined;
+  create?: MovieCreateWithoutDirectorInput[] | undefined;
 
   @TypeGraphQL.Field(_type => [MovieWhereUniqueInput], {
     nullable: true,
     description: undefined
   })
-  connect?: MovieWhereUniqueInput[] | null | undefined;
+  connect?: MovieWhereUniqueInput[] | undefined;
 }

@@ -7,23 +7,17 @@ import { ClientWhereUniqueInput } from "../../inputs/ClientWhereUniqueInput";
 @TypeGraphQL.ArgsType()
 export class AggregateClientCountArgs {
   @TypeGraphQL.Field(_type => ClientWhereInput, { nullable: true })
-  where?: ClientWhereInput | null | undefined;
+  where?: ClientWhereInput | undefined;
 
   @TypeGraphQL.Field(_type => ClientOrderByInput, { nullable: true })
-  orderBy?: ClientOrderByInput | null | undefined;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  skip?: number | null | undefined;
+  orderBy?: ClientOrderByInput | undefined;
 
   @TypeGraphQL.Field(_type => ClientWhereUniqueInput, { nullable: true })
-  after?: ClientWhereUniqueInput | null | undefined;
-
-  @TypeGraphQL.Field(_type => ClientWhereUniqueInput, { nullable: true })
-  before?: ClientWhereUniqueInput | null | undefined;
+  cursor?: ClientWhereUniqueInput | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  first?: number | null | undefined;
+  take?: number | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  last?: number | null | undefined;
+  skip?: number | undefined;
 }

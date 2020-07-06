@@ -1,5 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import GraphQLJSON from "graphql-type-json";
+import { JsonValue, InputJsonValue } from "../../../client";
 import { DirectorCreateWithoutMoviesInput } from "../inputs/DirectorCreateWithoutMoviesInput";
 import { DirectorWhereUniqueInput } from "../inputs/DirectorWhereUniqueInput";
 
@@ -12,11 +13,11 @@ export class DirectorCreateOneWithoutMoviesInput {
     nullable: true,
     description: undefined
   })
-  create?: DirectorCreateWithoutMoviesInput | null | undefined;
+  create?: DirectorCreateWithoutMoviesInput | undefined;
 
   @TypeGraphQL.Field(_type => DirectorWhereUniqueInput, {
     nullable: true,
     description: undefined
   })
-  connect?: DirectorWhereUniqueInput | null | undefined;
+  connect?: DirectorWhereUniqueInput | undefined;
 }

@@ -1,5 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import GraphQLJSON from "graphql-type-json";
+import { JsonValue, InputJsonValue } from "../../../client";
 import { ClientCreateWithoutPostsInput } from "../inputs/ClientCreateWithoutPostsInput";
 import { ClientWhereUniqueInput } from "../inputs/ClientWhereUniqueInput";
 
@@ -12,11 +13,11 @@ export class ClientCreateOneWithoutPostsInput {
     nullable: true,
     description: undefined
   })
-  create?: ClientCreateWithoutPostsInput | null | undefined;
+  create?: ClientCreateWithoutPostsInput | undefined;
 
   @TypeGraphQL.Field(_type => ClientWhereUniqueInput, {
     nullable: true,
     description: undefined
   })
-  connect?: ClientWhereUniqueInput | null | undefined;
+  connect?: ClientWhereUniqueInput | undefined;
 }

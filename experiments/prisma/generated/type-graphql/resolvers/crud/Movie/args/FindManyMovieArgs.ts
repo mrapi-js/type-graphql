@@ -7,23 +7,17 @@ import { MovieWhereUniqueInput } from "../../../inputs/MovieWhereUniqueInput";
 @TypeGraphQL.ArgsType()
 export class FindManyMovieArgs {
   @TypeGraphQL.Field(_type => MovieWhereInput, { nullable: true })
-  where?: MovieWhereInput | null | undefined;
+  where?: MovieWhereInput | undefined;
 
   @TypeGraphQL.Field(_type => MovieOrderByInput, { nullable: true })
-  orderBy?: MovieOrderByInput | null | undefined;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  skip?: number | null | undefined;
+  orderBy?: MovieOrderByInput | undefined;
 
   @TypeGraphQL.Field(_type => MovieWhereUniqueInput, { nullable: true })
-  after?: MovieWhereUniqueInput | null | undefined;
-
-  @TypeGraphQL.Field(_type => MovieWhereUniqueInput, { nullable: true })
-  before?: MovieWhereUniqueInput | null | undefined;
+  cursor?: MovieWhereUniqueInput | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  first?: number | null | undefined;
+  take?: number | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  last?: number | null | undefined;
+  skip?: number | undefined;
 }

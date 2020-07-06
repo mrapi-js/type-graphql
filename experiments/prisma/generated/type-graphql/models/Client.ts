@@ -1,5 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import GraphQLJSON from "graphql-type-json";
+import { JsonValue, InputJsonValue } from "../../client";
 import { Post } from "../models/Post";
 import { Role } from "../enums/Role";
 
@@ -23,7 +24,7 @@ export class Client {
   email!: string;
 
   /** renamed field doc */
-  name?: string | null | undefined;
+  name?: string | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false,
@@ -39,7 +40,7 @@ export class Client {
   })
   amount!: number;
 
-  posts?: Post[] | null | undefined;
+  posts?: Post[] | undefined;
 
   @TypeGraphQL.Field(_type => Role, {
     nullable: false,
@@ -52,7 +53,7 @@ export class Client {
     nullable: true,
     description: "renamed field doc",
   })
-  get firstName(): string | null | undefined {
+  get firstName(): string | undefined {
     return this.name;
   }
 

@@ -1,8 +1,4 @@
-import { DMMF } from "@prisma/client/runtime/dmmf-types";
-import pluralize from "pluralize";
-
 import { DMMFTypeInfo } from "./types";
-import { ModelKeys } from "./config";
 import { DmmfDocument } from "./dmmf/dmmf-document";
 import { modelAttributeRegex, fieldAttributeRegex } from "./dmmf/helpers";
 
@@ -11,12 +7,13 @@ export function noop() {}
 export function getFieldTSType(
   typeInfo: DMMFTypeInfo,
   dmmfDocument: DmmfDocument,
+  isInputType: boolean,
   modelName?: string,
   typeName?: string,
 ) {
   let TSType: string;
   if (typeInfo.kind === "scalar") {
-    TSType = mapScalarToTSType(typeInfo.type);
+    TSType = mapScalarToTSType(typeInfo.type, isInputType);
   } else if (typeInfo.kind === "object") {
     if (dmmfDocument.isModelName(typeInfo.type)) {
       TSType = dmmfDocument.getModelTypeName(typeInfo.type)!;
@@ -39,12 +36,14 @@ export function getFieldTSType(
     }
   }
   if (!typeInfo.isRequired) {
-    TSType += " | null | undefined";
+    // FIXME: use properly null for output and undefined for input
+    // TSType += " | null | undefined";
+    TSType += " | undefined";
   }
   return TSType;
 }
 
-export function mapScalarToTSType(scalar: string) {
+export function mapScalarToTSType(scalar: string, isInputType: boolean) {
   switch (scalar) {
     case "ID":
     case "UUID": {
@@ -64,7 +63,7 @@ export function mapScalarToTSType(scalar: string) {
       return "number";
     }
     case "Json":
-      return "object";
+      return isInputType ? "InputJsonValue" : "JsonValue";
     default:
       throw new Error(`Unrecognized scalar type: ${scalar}`);
   }
@@ -124,16 +123,6 @@ export function mapScalarToTypeGraphQLType(scalar: string) {
   }
 }
 
-export function selectInputTypeFromTypes(
-  inputTypes: DMMF.SchemaArgInputType[],
-): DMMF.SchemaArgInputType {
-  return (
-    inputTypes.find(it => it.kind === "object") ||
-    inputTypes.find(it => it.kind === "enum") ||
-    inputTypes[0]
-  );
-}
-
 export function camelCase(str: string) {
   return str[0].toLowerCase() + str.slice(1);
 }
@@ -142,34 +131,7 @@ export function pascalCase(str: string): string {
   return str[0].toUpperCase() + str.slice(1);
 }
 
-export function getMappedActionName(
-  actionName: ModelKeys,
-  typeName: string,
-): string {
-  const defaultMappedActionName = `${actionName}${typeName}`;
-
-  const hasNoPlural = typeName === pluralize(typeName);
-  if (hasNoPlural) {
-    return defaultMappedActionName;
-  }
-
-  switch (actionName) {
-    case "findOne": {
-      return camelCase(typeName);
-    }
-    case "findMany": {
-      return pluralize(camelCase(typeName));
-    }
-    default: {
-      return defaultMappedActionName;
-    }
-  }
-}
-
-export function getInputTypeName(
-  originalInputName: string,
-  dmmfDocument: DmmfDocument,
-): string {
+function getInputKeywordPhrasePosition(inputTypeName: string) {
   const inputParseResult = [
     "Create",
     "OrderBy",
@@ -179,20 +141,44 @@ export function getInputTypeName(
     "Where",
     "Filter",
   ]
-    .map(inputKeyword => originalInputName.search(inputKeyword))
+    .map(inputKeyword => inputTypeName.search(inputKeyword))
     .filter(position => position >= 0);
 
   if (inputParseResult.length === 0) {
-    return originalInputName;
+    return;
   }
 
   const keywordPhrasePosition = inputParseResult[0];
+  return keywordPhrasePosition;
+}
+
+export function getModelNameFromInputType(inputTypeName: string) {
+  const keywordPhrasePosition = getInputKeywordPhrasePosition(inputTypeName);
+  if (!keywordPhrasePosition) {
+    return;
+  }
+  const modelName = inputTypeName.slice(0, keywordPhrasePosition);
+  return modelName;
+}
+
+export function getInputTypeName(
+  originalInputName: string,
+  dmmfDocument: DmmfDocument,
+): string {
+  const keywordPhrasePosition = getInputKeywordPhrasePosition(
+    originalInputName,
+  );
+  if (!keywordPhrasePosition) {
+    return originalInputName;
+  }
+
   const modelName = originalInputName.slice(0, keywordPhrasePosition);
   const typeNameRest = originalInputName.slice(keywordPhrasePosition);
   const modelTypeName = dmmfDocument.getModelTypeName(modelName);
   if (!modelTypeName) {
     return originalInputName;
   }
+
   return `${modelTypeName}${typeNameRest}`;
 }
 
@@ -211,4 +197,8 @@ export function cleanDocsString(
   cleanedDocs = cleanedDocs.split("\n").join("");
   cleanedDocs = cleanedDocs.split("\\n").join("");
   return cleanedDocs;
+}
+
+export function toUnixPath(maybeWindowsPath: string) {
+  return maybeWindowsPath.split("\\").join("/");
 }
