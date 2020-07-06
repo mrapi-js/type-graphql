@@ -12,14 +12,16 @@ Fist of all, you have to install the generator, as a dev dependency:
 npm i -D typegraphql-prisma
 ```
 
-`typegraphql-prisma` is designed to work only with selected version of `prisma`, so please install this version if you don't have it already installed:
+Futhermore, `typegraphql-prisma` to work properly requires `prisma` to be, so please install prisma dependencies if you don't have it already installed:
 
 ```sh
-npm i -D @prisma/cli@2.0.0-alpha.1236
-npm i @prisma/client@2.0.0-alpha.1236
+npm i -D @prisma/cli
+npm i @prisma/client
 ```
 
-To support Prisma `Json` scalar, you also need to install the GraphQL JSON scalar:
+> `typegraphql-prisma` is designed to work with a selected version of `prisma` (or newer), so please make sure you use `@prisma/cli` and `@prisma/client` of version at least `2.1.3`!
+
+You also need to install the GraphQL JSON scalar library (to support the Prisma `Json` scalar):
 
 ```sh
 npm i graphql-type-json
@@ -37,7 +39,7 @@ generator client {
 }
 
 generator typegraphql {
-  provider = "node_modules/typegraphql-prisma/generator.js"
+  provider = "node node_modules/typegraphql-prisma/generator.js"
 }
 ```
 
@@ -45,7 +47,7 @@ Then after running `npx prisma generate`, this will emit the generated TypeGraph
 
 ```prisma
 generator typegraphql {
-  provider = "node_modules/typegraphql-prisma/generator.js"
+  provider = "node node_modules/typegraphql-prisma/generator.js"
   output   = "../prisma/generated/type-graphql"
 }
 ```
@@ -222,7 +224,7 @@ const schema = await buildSchema({
 
 #### Changing exposed model type name
 
-You can also change the name of the model types exposed in GraphQL Schema. 
+You can also change the name of the model types exposed in GraphQL Schema.
 To achieve this, just put the `@@TypeGraphQL.type` doc line above the model definition in `schema.prisma` file, e.g:
 
 ```prisma
@@ -244,7 +246,7 @@ type Mutation {
 
 #### Changing exposed model type field name
 
-You can also change the name of the model type fields exposed in GraphQL Schema. 
+You can also change the name of the model type fields exposed in GraphQL Schema.
 To achieve this, just put the `@TypeGraphQL.field` doc line above the model field definition in `schema.prisma` file, e.g:
 
 ```prisma
@@ -266,10 +268,18 @@ type User {
 }
 ```
 
-All generated CRUD and relations resolvers fully support this feature and map the original prisma property to the changed field exposed in schema under the hood.
+All generated CRUD and relations resolvers fully support this feature and they map under the hood the original prisma property to the renamed field exposed in schema.
 
-However, at least for now, this feature changes the name only for model's `@ObjectType`, so all resolvers args and input types still reference the original fields names.
-This behavior is a subject to change in the near future.
+The same goes to the resolvers input types - they will also be emitted with changed field name, e.g.:
+
+```graphql
+input UserCreateInput {
+  emailAddress: String!
+  posts: PostCreateManyWithoutAuthorInput
+}
+```
+
+The emitted input type classes automatically map the provided renamed field values from GraphQL query into proper Prisma input properties out of the box.
 
 ## Examples
 
@@ -279,7 +289,7 @@ https://github.com/MichalLytek/type-graphql/tree/prisma/examples/Readme.md
 
 ## Feedback
 
-Currently released version `0.1.x` is just a preview of the upcoming integration. For now it lacks customization option - picking/omitting fields of object types to expose in the schema, as well as picking CRUD methods and exposed args.
+Currently released version `0.x` is just a preview of the upcoming integration. For now it lacks customization option - picking/omitting fields of object types to expose in the schema, as well as picking exposed args fields.
 
 However, the base functionality is working well, so I strongly encourage you to give it a try and play with it. Any feedback about the developers experience, bug reports or ideas about new features or enhancements are very welcome - please feel free to put your two cents into [discussion in the issue](https://github.com/MichalLytek/type-graphql/issues/476).
 

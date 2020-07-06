@@ -7,23 +7,17 @@ import { CategoryWhereUniqueInput } from "../../inputs/CategoryWhereUniqueInput"
 @TypeGraphQL.ArgsType()
 export class AggregateCategoryCountArgs {
   @TypeGraphQL.Field(_type => CategoryWhereInput, { nullable: true })
-  where?: CategoryWhereInput | null | undefined;
+  where?: CategoryWhereInput | undefined;
 
   @TypeGraphQL.Field(_type => CategoryOrderByInput, { nullable: true })
-  orderBy?: CategoryOrderByInput | null | undefined;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  skip?: number | null | undefined;
+  orderBy?: CategoryOrderByInput | undefined;
 
   @TypeGraphQL.Field(_type => CategoryWhereUniqueInput, { nullable: true })
-  after?: CategoryWhereUniqueInput | null | undefined;
-
-  @TypeGraphQL.Field(_type => CategoryWhereUniqueInput, { nullable: true })
-  before?: CategoryWhereUniqueInput | null | undefined;
+  cursor?: CategoryWhereUniqueInput | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  first?: number | null | undefined;
+  take?: number | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, { nullable: true })
-  last?: number | null | undefined;
+  skip?: number | undefined;
 }

@@ -1,45 +1,34 @@
-import { DMMF } from "@prisma/client/runtime/dmmf-types";
-
-import {
-  getFieldTSType,
-  getMappedActionName,
-  getTypeGraphQLType,
-} from "../helpers";
-import { DMMFTypeInfo } from "../types";
-import { GenerateCodeOptions } from "../options";
-import { ModelKeys } from "../config";
+import { getFieldTSType, getTypeGraphQLType } from "../helpers";
 import { DmmfDocument } from "../dmmf/dmmf-document";
+import { DMMF } from "../dmmf/types";
 
 export function generateCrudResolverClassMethodDeclaration(
-  operationKind: string,
-  actionName: ModelKeys,
+  action: DMMF.Action,
   typeName: string,
   method: DMMF.SchemaField,
   argsTypeName: string | undefined,
   collectionName: string,
   dmmfDocument: DmmfDocument,
   mapping: DMMF.Mapping,
-  options: GenerateCodeOptions,
 ) {
   const returnTSType = getFieldTSType(
-    method.outputType as DMMFTypeInfo,
+    method.outputType,
     dmmfDocument,
+    false,
     mapping.model,
     typeName,
   );
 
   return {
-    name: options.useOriginalMapping
-      ? `${actionName}${typeName}`
-      : getMappedActionName(actionName, typeName),
+    name: action.name,
     isAsync: true,
     returnType: `Promise<${returnTSType}>`,
     decorators: [
       {
-        name: `TypeGraphQL.${operationKind}`,
+        name: `TypeGraphQL.${action.operation}`,
         arguments: [
           `_returns => ${getTypeGraphQLType(
-            method.outputType as DMMFTypeInfo,
+            method.outputType,
             dmmfDocument,
             mapping.model,
             typeName,
@@ -52,7 +41,7 @@ export function generateCrudResolverClassMethodDeclaration(
       },
     ],
     parameters: [
-      ...(actionName === "aggregate"
+      ...(action.kind === "aggregate"
         ? []
         : [
             {
@@ -73,13 +62,13 @@ export function generateCrudResolverClassMethodDeclaration(
           ]),
     ],
     statements:
-      actionName === "aggregate"
+      action.kind === "aggregate"
         ? [
             // it will expose field resolvers automatically
             `return new ${returnTSType}();`,
           ]
         : [
-            `return ctx.prisma.${collectionName}.${actionName}(${
+            `return ctx.prisma.${collectionName}.${action.kind}(${
               argsTypeName ? "args" : ""
             });`,
           ],

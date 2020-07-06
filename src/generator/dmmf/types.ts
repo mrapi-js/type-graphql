@@ -14,22 +14,27 @@ export declare namespace DMMF {
     models: Model[];
     enums: Enum[];
   }
+  interface UniqueIndex {
+    name: string;
+    fields: string[];
+  }
   interface Model {
     name: string;
     isEmbedded: boolean;
     dbName: string | null;
     fields: Field[];
-    documentation?: string;
-    // [key: string]: any;
-    idFields: string[];
     uniqueFields: string[][];
+    uniqueIndexes: UniqueIndex[];
+    documentation?: string;
+    idFields: string[];
+    // [key: string]: any;
+    // additional props
     typeName: string;
   }
   type FieldKind = "scalar" | "object" | "enum";
   interface Field {
     kind: FieldKind;
     name: string;
-    typeFieldAlias?: string;
     isRequired: boolean;
     isList: boolean;
     isUnique: boolean;
@@ -37,16 +42,20 @@ export declare namespace DMMF {
     type: string;
     dbNames: string[] | null;
     isGenerated: boolean;
+    hasDefaultValue: boolean;
+    default?: FieldDefault | string | boolean | number;
     relationToFields?: any[];
     relationOnDelete?: string;
     relationName?: string;
     documentation?: string;
-    default?: FieldDefault | string | boolean;
     // [key: string]: any;
+    // additional props
+    typeFieldAlias?: string;
+    typeGraphQLType: string;
+    fieldTSType: string;
   }
   interface FieldDefault {
     name: string;
-    returnType: string;
     args: any[];
   }
   interface Schema {
@@ -71,30 +80,49 @@ export declare namespace DMMF {
     isRequired: boolean;
     isNullable: boolean;
     isList: boolean;
-    type: ArgType;
+    // type: ArgType;
     kind: FieldKind;
+    // additional props
+    argType: ArgType;
+    type: string;
   }
   interface SchemaArg {
     name: string;
-    inputType: SchemaArgInputType[];
+    // inputType: SchemaArgInputType[];
     isRelationFilter?: boolean;
     nullEqualsUndefined?: boolean;
     comment?: string;
+    // additional props
+    selectedInputType: SchemaArgInputType;
+    typeName: string;
+    typeGraphQLType: string;
+    fieldTSType: string;
   }
   interface OutputType {
     name: string;
-    fields: SchemaField[];
+    fields: OutputSchemaField[];
     isEmbedded?: boolean;
+    // additional props
+    modelName: string;
+    typeName: string;
   }
   interface SchemaField {
     name: string;
     outputType: {
-      type: string | OutputType | Enum;
+      // type: string | OutputType | Enum;
+      type: string;
       isList: boolean;
       isRequired: boolean;
       kind: FieldKind;
     };
     args: SchemaArg[];
+    // additional props
+    typeGraphQLType: string;
+    fieldTSType: string;
+  }
+  // additional type
+  interface OutputSchemaField extends SchemaField {
+    argsTypeName: string | undefined;
   }
   interface InputType {
     name: string;
@@ -103,19 +131,31 @@ export declare namespace DMMF {
     atLeastOne?: boolean;
     atMostOne?: boolean;
     fields: SchemaArg[];
+    // additional props
+    typeName: string;
   }
   interface Mapping {
     model: string;
     plural: string;
-    findOne?: string | null;
-    findMany?: string | null;
-    create?: string | null;
-    update?: string | null;
-    updateMany?: string | null;
-    upsert?: string | null;
-    delete?: string | null;
-    deleteMany?: string | null;
-    aggregate?: string | null;
+    // findOne?: string | null;
+    // findMany?: string | null;
+    // create?: string | null;
+    // update?: string | null;
+    // updateMany?: string | null;
+    // upsert?: string | null;
+    // delete?: string | null;
+    // deleteMany?: string | null;
+    // aggregate?: string | null;
+
+    // additional props
+    actions: Action[];
+  }
+  // additional type
+  interface Action {
+    name: string;
+    fieldName: string;
+    kind: ModelAction;
+    operation: "Query" | "Mutation";
   }
   enum ModelAction {
     findOne = "findOne",
@@ -126,6 +166,8 @@ export declare namespace DMMF {
     upsert = "upsert",
     delete = "delete",
     deleteMany = "deleteMany",
+    // additional props
+    aggregate = "aggregate",
   }
 }
 export interface BaseField {

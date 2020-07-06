@@ -1,9 +1,11 @@
 import * as TypeGraphQL from "type-graphql";
 import GraphQLJSON from "graphql-type-json";
+import { JsonValue, InputJsonValue } from "../../../client";
 import { BooleanFilter } from "../inputs/BooleanFilter";
 import { ClientWhereInput } from "../inputs/ClientWhereInput";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { IntFilter } from "../inputs/IntFilter";
+import { JsonFilter } from "../inputs/JsonFilter";
 import { NullablePostKindFilter } from "../inputs/NullablePostKindFilter";
 import { NullableStringFilter } from "../inputs/NullableStringFilter";
 import { StringFilter } from "../inputs/StringFilter";
@@ -18,71 +20,77 @@ export class PostWhereInput {
     nullable: true,
     description: undefined
   })
-  uuid?: UUIDFilter | null | undefined;
+  uuid?: UUIDFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeFilter, {
     nullable: true,
     description: undefined
   })
-  createdAt?: DateTimeFilter | null | undefined;
+  createdAt?: DateTimeFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeFilter, {
     nullable: true,
     description: undefined
   })
-  updatedAt?: DateTimeFilter | null | undefined;
+  updatedAt?: DateTimeFilter | undefined;
 
   @TypeGraphQL.Field(_type => BooleanFilter, {
     nullable: true,
     description: undefined
   })
-  published?: BooleanFilter | null | undefined;
+  published?: BooleanFilter | undefined;
 
   @TypeGraphQL.Field(_type => StringFilter, {
     nullable: true,
     description: undefined
   })
-  title?: StringFilter | null | undefined;
+  title?: StringFilter | undefined;
 
   @TypeGraphQL.Field(_type => NullableStringFilter, {
     nullable: true,
     description: undefined
   })
-  content?: NullableStringFilter | null | undefined;
+  content?: NullableStringFilter | undefined;
 
   @TypeGraphQL.Field(_type => IntFilter, {
     nullable: true,
     description: undefined
   })
-  authorId?: IntFilter | null | undefined;
+  authorId?: IntFilter | undefined;
 
   @TypeGraphQL.Field(_type => NullablePostKindFilter, {
     nullable: true,
     description: undefined
   })
-  kind?: NullablePostKindFilter | null | undefined;
+  kind?: NullablePostKindFilter | undefined;
+
+  @TypeGraphQL.Field(_type => JsonFilter, {
+    nullable: true,
+    description: undefined
+  })
+  metadata?: JsonFilter | undefined;
 
   @TypeGraphQL.Field(_type => [PostWhereInput], {
     nullable: true,
     description: undefined
   })
-  AND?: PostWhereInput[] | null | undefined;
+  AND?: PostWhereInput[] | undefined;
 
   @TypeGraphQL.Field(_type => [PostWhereInput], {
     nullable: true,
     description: undefined
   })
-  OR?: PostWhereInput[] | null | undefined;
+  OR?: PostWhereInput[] | undefined;
 
   @TypeGraphQL.Field(_type => [PostWhereInput], {
     nullable: true,
     description: undefined
   })
-  NOT?: PostWhereInput[] | null | undefined;
+  NOT?: PostWhereInput[] | undefined;
 
   @TypeGraphQL.Field(_type => ClientWhereInput, {
     nullable: true,
     description: undefined
   })
-  author?: ClientWhereInput | null | undefined;
+  author?: ClientWhereInput | undefined;
 }

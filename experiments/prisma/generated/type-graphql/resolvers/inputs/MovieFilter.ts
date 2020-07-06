@@ -1,5 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import GraphQLJSON from "graphql-type-json";
+import { JsonValue, InputJsonValue } from "../../../client";
 import { MovieWhereInput } from "../inputs/MovieWhereInput";
 
 @TypeGraphQL.InputType({
@@ -11,17 +12,17 @@ export class MovieFilter {
     nullable: true,
     description: undefined
   })
-  every?: MovieWhereInput | null | undefined;
+  every?: MovieWhereInput | undefined;
 
   @TypeGraphQL.Field(_type => MovieWhereInput, {
     nullable: true,
     description: undefined
   })
-  some?: MovieWhereInput | null | undefined;
+  some?: MovieWhereInput | undefined;
 
   @TypeGraphQL.Field(_type => MovieWhereInput, {
     nullable: true,
     description: undefined
   })
-  none?: MovieWhereInput | null | undefined;
+  none?: MovieWhereInput | undefined;
 }
