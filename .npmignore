@@ -1,0 +1,9 @@
+# Directories
+src/
+img/
+tests/
+examples/
+experiments/
+node_modules/
+.vscode/
+.github/

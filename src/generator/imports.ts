@@ -171,6 +171,7 @@ export const generateEnumsImports = createImportGenerator(enumsFolderName);
 export const generateInputsImports = createImportGenerator(inputsFolderName);
 export const generateOutputsImports = createImportGenerator(outputsFolderName);
 export const generateArgsImports = createImportGenerator(argsFolderName);
+export const generateAggregateOutputsImports = createImportGenerator("");
 function createImportGenerator(elementsDirName: string) {
   return (sourceFile: SourceFile, elementsNames: string[], level = 1) => {
     const distinctElementsNames = [...new Set(elementsNames)].sort();

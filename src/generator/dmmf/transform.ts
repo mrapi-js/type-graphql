@@ -126,8 +126,23 @@ function transformInputType(dmmfDocument: DmmfDocument) {
 function transformOutputType(dmmfDocument: DmmfDocument) {
   return (outputType: PrismaDMMF.OutputType): DMMF.OutputType => {
     // TODO: make it more future-proof
-    const modelName = outputType.name.replace("Aggregate", "");
-    const typeName = !outputType.name.includes("Aggregate")
+    // const modelName = outputType.name.replace("Aggregate", "");
+    // const typeName = !outputType.name.includes("Aggregate")
+    //   ? outputType.name
+    //   : `Aggregate${dmmfDocument.getModelTypeName(
+    //       outputType.name.replace("Aggregate", ""),
+    //     )}`;
+
+    // !important: supports prisma@2.2.0
+    const modelName = outputType.name.startsWith("Aggregate")
+      ? outputType.name.replace("Aggregate", "")
+      : outputType.name.endsWith("AggregateOutputType")
+      ? outputType.name.slice(
+          1,
+          outputType.name.length - ("AggregateOutputType".length + 3),
+        )
+      : outputType.name;
+    const typeName = !outputType.name.startsWith("Aggregate")
       ? outputType.name
       : `Aggregate${dmmfDocument.getModelTypeName(
           outputType.name.replace("Aggregate", ""),

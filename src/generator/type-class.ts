@@ -17,6 +17,7 @@ import {
   generateArgsImports,
   generateGraphQLScalarImport,
   generatePrismaJsonTypeImport,
+  generateAggregateOutputsImports,
 } from "./imports";
 import saveSourceFile from "../utils/saveSourceFile";
 import generateArgsTypeClassFromArgs from "./args-class";
@@ -44,6 +45,14 @@ export async function generateOutputTypeClassFromType(
   generateGraphQLScalarImport(sourceFile);
   generatePrismaJsonTypeImport(sourceFile, options.relativePrismaOutputPath, 2);
   generateArgsImports(sourceFile, fieldArgsTypeNames, 0);
+
+  // !important: supports prisma@2.2.0 (add typeGraphQLType imports)
+  const AggregateTypeNames = type.fields
+    .filter(
+      it => it.typeGraphQLType && !it.typeGraphQLType.startsWith("TypeGraphQL"),
+    )
+    .map(it => it.typeGraphQLType!);
+  generateAggregateOutputsImports(sourceFile, AggregateTypeNames, 0);
 
   // TODO: move to the root level
   await Promise.all(
